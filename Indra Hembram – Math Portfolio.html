@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Indra – Engineering, mathematically</title>
+<meta name="description" content="Indra Hembram, Electronics and Communication Engineering student building practical systems in power electronics, event technology, and environmental monitoring.">
+<meta name="theme-color" content="#131417">
+<link rel="icon" href="assets/icon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#131417;--panel:#1b1c21;--gold:#C8A24A;--dim:rgba(200,162,74,.35);--tx:#E8E4D8;--mute:#8F8C80;--mono:"JetBrains Mono",ui-monospace,monospace;--ser:"Cormorant Garamond",Georgia,serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:500 20px/1.55 var(--ser)}
+h1,h2,h3{font-weight:700;margin:0;letter-spacing:-.01em}
+.m,button,.btn,nav{font-family:var(--mono)}
+.wrap{max-width:1000px;margin:0 auto;padding:0 22px}
+nav{position:absolute;right:0;top:env(safe-area-inset-top,0px);display:flex;gap:18px;padding:16px 22px;font-size:13px;z-index:3}
+nav a{color:var(--mute);text-decoration:none}nav a:hover{color:var(--gold)}
+.hero{min-height:100svh;display:grid;align-items:center;padding:72px 0 40px}
+.hero .wrap{display:grid;gap:34px;grid-template-columns:1fr 1.618fr;align-items:center}
+h1{font-size:clamp(64px,12vw,120px);line-height:.95}
+.sub{max-width:28ch;color:var(--mute);margin:14px 0 26px}
+#sp{width:100%;aspect-ratio:1.618;display:block}
+.age{border:1px solid var(--dim);padding:16px 18px;max-width:420px}
+.age .lbl{font:400 12px var(--mono);color:var(--mute)}
+.age .num{font:500 clamp(18px,4.4vw,26px)/1.3 var(--mono);color:var(--gold);word-break:break-all;margin:6px 0}
+.age .yrs{font:400 13px var(--mono);color:var(--mute)}
+.badge{display:inline-block;min-height:22px;font:500 12px var(--mono);color:var(--bg);background:var(--gold);padding:1px 8px;margin-top:8px;visibility:hidden}
+.badge.on{visibility:visible}
+.seg{display:flex;margin-top:12px}
+.seg button{flex:1;background:none;border:1px solid var(--dim);color:var(--mute);padding:8px 4px;font-size:12px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+section{padding:84px 0;border-top:1px solid var(--dim)}
+h2{font-size:clamp(32px,6vw,48px);margin-bottom:8px}
+.lead{color:var(--mute);max-width:52ch;margin:0 0 30px}
+.proof dt{font:500 14px var(--mono);color:var(--gold);margin-top:22px}
+.proof dd{margin:4px 0 0;max-width:62ch}
+.proof ul{margin:4px 0 0;padding-left:20px}
+.nl{list-style:none;margin:34px 0 0;padding:0;display:flex;justify-content:space-between;position:relative;gap:8px}
+.nl::before{content:"";position:absolute;left:0;right:0;top:14px;height:1px;background:var(--gold)}
+.nl li{position:relative;flex:1;padding-top:40px;font-size:16px;line-height:1.3;text-align:center}
+.nl li::before{content:attr(data-n);position:absolute;top:0;left:50%;transform:translateX(-50%);width:29px;height:29px;border:1px solid var(--gold);border-radius:50%;background:var(--bg);font:12px/27px var(--mono);color:var(--gold)}
+.qed{font:500 15px var(--mono);color:var(--gold);margin-top:26px;text-align:right}
+.pg{display:grid;gap:16px;grid-template-columns:1.618fr 1fr}
+.pg .card:first-child{grid-row:span 2}
+.card{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;gap:20px;padding:24px;border:1px solid var(--dim);background:var(--panel);min-height:190px}
+.card:hover,.card:focus-visible{border-color:var(--gold)}
+.card h3{font-size:26px}
+.card .mb{font:400 14px/1.5 var(--mono);color:var(--gold)}
+dialog{background:var(--panel);color:var(--tx);border:1px solid var(--gold);padding:28px;max-width:560px;width:calc(100% - 32px)}
+dialog::backdrop{background:rgba(0,0,0,.7)}
+dialog h3{font-size:30px;margin-bottom:12px}
+dialog .k{font:500 12px var(--mono);color:var(--gold);margin:16px 0 4px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chips span{font:400 13px var(--mono);border:1px solid var(--dim);padding:3px 10px}
+.btn{display:inline-block;font-size:14px;padding:10px 18px;border:1px solid var(--gold);color:var(--tx);text-decoration:none;background:none;cursor:pointer;margin:12px 10px 0 0}
+.btn:hover{background:var(--gold);color:var(--bg)}
+.lab{border:1px solid var(--dim);padding:16px;background:var(--panel)}
+#lab{width:100%;aspect-ratio:2/1;display:block}
+.ctl{display:grid;gap:8px 18px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-top:12px;font:400 13px var(--mono);color:var(--mute)}
+.ctl input{width:100%;accent-color:var(--gold);min-height:28px}
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tabs button{background:none;border:1px solid var(--dim);color:var(--mute);padding:8px 14px;font-size:13px;cursor:pointer}
+.tabs button[aria-pressed=true]{border-color:var(--gold);color:var(--gold)}
+math{font-size:1.15em;color:var(--gold);font-family:var(--ser)}
+.euler{all:unset;cursor:pointer;display:block;font-size:30px;margin:10px 0}
+.euler:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+#tr{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+.pin{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--gold);color:var(--bg);border:0;padding:12px 18px;font:500 13px var(--mono);cursor:pointer}
+body.math::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:40;background:
+linear-gradient(90deg,transparent calc(38.2% - .5px),var(--gold) calc(38.2% - .5px),var(--gold) calc(38.2% + .5px),transparent calc(38.2% + .5px)),
+linear-gradient(90deg,transparent calc(61.8% - .5px),var(--gold) calc(61.8% - .5px),var(--gold) calc(61.8% + .5px),transparent calc(61.8% + .5px)),
+linear-gradient(0deg,transparent calc(38.2% - .5px),var(--gold) calc(38.2% - .5px),var(--gold) calc(38.2% + .5px),transparent calc(38.2% + .5px)),
+linear-gradient(0deg,transparent calc(61.8% - .5px),var(--gold) calc(61.8% - .5px),var(--gold) calc(61.8% + .5px),transparent calc(61.8% + .5px)),
+repeating-linear-gradient(90deg,rgba(200,162,74,.12) 0 1px,transparent 1px 32px),repeating-linear-gradient(0deg,rgba(200,162,74,.12) 0 1px,transparent 1px 32px)}
+body.math .card,body.math .lab,body.math .age,body.math section{outline:1px dashed var(--gold);outline-offset:-1px}
+footer{padding:44px 0 90px;border-top:1px solid var(--dim);color:var(--mute);font-size:16px}
+.site-share{display:block;margin-top:12px;padding:6px 0;border:0;background:none;color:var(--mute);font:400 11px var(--mono);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.site-share:hover{color:var(--gold)}
+.site-share[hidden]{display:none}
+@media(max-width:760px){.hero .wrap{grid-template-columns:1fr}.pg{grid-template-columns:1fr}.pg .card:first-child{grid-row:auto}nav{gap:12px;font-size:12px}
+.nl{flex-direction:column;padding-left:6px}.nl::before{left:14px;right:auto;top:0;bottom:0;width:1px;height:auto}.nl li{text-align:left;padding:2px 0 22px 46px}.nl li::before{left:0;transform:none}}
+@media print{html,body{background:#fff;color:#000}body>*:not(#resume){display:none!important}#resume{border:0}#resume .proof,#resume .nl,#resume h2,#resume .qed,#resume .no-print{display:none}.proof dt,.qed{color:#7a5d12}.nl li::before{background:#fff}}
+
+body{overflow-x:hidden}
+.pt{position:relative;width:240px;height:240px;margin-bottom:6px}
+.pt img{position:absolute;inset:35px;width:170px;height:170px;border-radius:50%;object-fit:cover;clip-path:circle(0);animation:rv 1.6s 2.4s cubic-bezier(.2,.7,.2,1) forwards}
+.ring{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ring path{fill:none;stroke:var(--gold);stroke-width:1.2;stroke-dasharray:1;stroke-dashoffset:1;animation:dr 2.6s ease forwards}
+.pt .eq{position:absolute;font-size:12px;opacity:0;white-space:nowrap;animation:fi .8s forwards}
+.pt .eq math{font-size:1.25em}
+.e1{left:0;top:-8px;animation-delay:.4s!important}.e2{right:0;top:-8px;animation-delay:1s!important}.e3{left:0;bottom:-6px;animation-delay:1.6s!important}.e4{right:0;bottom:-6px;animation-delay:2.1s!important}
+@keyframes rv{to{clip-path:circle(50%)}}@keyframes dr{to{stroke-dashoffset:0}}@keyframes fi{to{opacity:1}}
+.ab{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-top:30px}
+.ab>div{border:1px solid var(--dim);background:var(--panel);padding:20px 22px}
+.ab h4{font:500 12px var(--mono);color:var(--gold);margin:0 0 8px}.ab p{margin:0;font-size:18px}
+.pg{grid-template-columns:repeat(3,1fr);position:relative;padding:56px 0;align-items:center}
+.pg .card:first-child{grid-row:auto}
+.card{position:relative;z-index:1;opacity:0;transform:translateY(calc(var(--y,0px) + 28px));transition:opacity .7s,transform .7s}
+.card.in{opacity:1;transform:translateY(var(--y,0px))}
+.sw{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.sw path{fill:none;stroke:var(--gold);stroke-width:1.2;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 2.6s ease}
+.sw.in path{stroke-dashoffset:0}
+.rv{background:#F4F1E8;color:#1b1a16;padding:clamp(20px,5vw,44px);font-size:17px;line-height:1.5;margin-top:22px}
+.rv h3{font-size:30px}.rv .ct{font:400 12px var(--mono);margin:4px 0 10px}
+.rv h4{font:500 12px var(--mono);color:#7a5d12;margin:16px 0 4px;border-bottom:1px solid #cdbf98;padding-bottom:2px}
+.rv p,.rv ul{margin:4px 0}.rv ul{padding-left:20px}
+.ach{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.ach div{background:linear-gradient(135deg,#F7DE9B,#C8A24A 60%,#E8B84A);color:#17130a;padding:22px;box-shadow:0 0 34px rgba(232,184,74,.25)}
+.ach b{display:block;font:700 clamp(44px,9vw,64px)/1 var(--ser);margin-bottom:8px}
+.ach span{font:500 13px/1.45 var(--mono)}
+.steps{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:16px}
+.steps li{display:flex;gap:16px;align-items:baseline;flex-wrap:wrap;opacity:0;transform:translateX(-14px);transition:opacity .6s,transform .6s;border-left:1px solid var(--gold);padding-left:16px;font-size:24px}
+.steps .m{font-size:12px;color:var(--gold);min-width:92px}
+.steps.in li{opacity:1;transform:none}
+.pin{display:block;text-decoration:none}
+@media(max-width:760px){.pg{grid-template-columns:1fr;padding:10px 0}.sw{display:none}.card{transform:translateX(16px)}.card.in{transform:translateX(0)}}
+@media(prefers-reduced-motion:reduce){.pt img{animation:none;clip-path:circle(50%)}.ring path{animation:none;stroke-dashoffset:0}.pt .eq{animation:none!important;opacity:1}.card,.steps li,.sw path{transition:none}}
+</style>
+</head>
+<body>
+<canvas id="tr" aria-hidden="true"></canvas>
+<nav aria-label="Sections"><a href="#about">About</a><a href="#work">Projects</a><a href="#resume">Resume</a><a href="#ach">Achievements</a><a href="#lab-s">Math Lab</a><a href="#contact">Contact</a></nav>
+
+<header class="hero"><div class="wrap">
+  <div>
+    <!-- Replace assets/profile.webp to update the profile photo; keep the same filename. -->
+    <div class="pt"><svg class="ring" viewBox="0 0 240 240" aria-hidden="true"><path id="wr" pathLength="1"/></svg><img src="assets/profile.webp" alt="Portrait of Indra" width="170" height="170"><span class="eq tex e1" data-tex="e^{i\pi}+1=0">e^(iπ)+1=0</span><span class="eq tex e2" data-tex="\varphi=\tfrac{1+\sqrt5}{2}">φ=(1+√5)/2</span><span class="eq tex e3" data-tex="V=IR">V=IR</span><span class="eq tex e4" data-tex="F(\omega)=\int f\,e^{-i\omega t}dt">F(ω)=∫f e^(−iωt)dt</span></div>
+    <h1>Indra</h1>
+    <p class="sub">Electronics and communication engineer. I look for the equation under every system.</p>
+    <div class="age" id="age">
+      <div class="lbl">Seconds I have been alive</div>
+      <div class="num" id="sec">0</div>
+      <div class="yrs" id="yrs"></div>
+      <div class="badge" id="badge"></div>
+      <div class="seg" role="group" aria-label="Number base">
+        <button aria-pressed="true" data-b="10">Decimal</button><button aria-pressed="false" data-b="2">Binary</button><button aria-pressed="false" data-b="16">Hexadecimal</button>
+      </div>
+    </div>
+  </div>
+  <canvas id="sp" aria-label="A golden spiral drawing itself over Fibonacci squares" role="img"></canvas>
+</div></header>
+
+<section id="about"><div class="wrap">
+  <h2>About me</h2>
+  <p class="lead" style="max-width:70ch">I am Indra Hembram, an Electronics and Communication Engineering student at Kalyani Government Engineering College (2022-2026), based in Kalyani, West Bengal. My training includes CNS and ATC systems at Airports Authority of India and SCADA power-grid monitoring at Damodar Valley Corporation. I build practical systems in event management, environmental monitoring, AI interfaces, and power electronics. I serve as General Secretary of SESWA and Convener of Chitrank, KGEC Art Club, and I am seeking a government or core engineering role.</p>
+  <div class="ab">
+    <div><h4>Education</h4><p>B.Tech in Electronics and Communication Engineering, KGEC (2022 to 2026). Higher Secondary at Dhaniakhali Mahamaya Vidyamandir, 87.4%.</p></div>
+    <div><h4>Training</h4><p>AAI (CNS and ATC), DVC (SCADA and power systems), Victoria Industries (automation, PLC I/O, robotic welding).</p></div>
+    <div><h4>Projects</h4><p>TRIAC fan speed controller, SESWA event platform, solar-powered air pollution detector, and Gulu AI Assistant.</p></div>
+    <div><h4>Leadership</h4><p>General Secretary of SESWA. Convener of Chitrank, KGEC Art Club, leading 70+ members.</p></div>
+    <div><h4>Skills</h4><p>Embedded systems, circuit design, PLC interfacing, Arduino, Python, C, MATLAB, React.js, Firebase, Cisco Packet Tracer, Git.</p></div>
+    <div><h4>Interests</h4><p>Mathematics, especially calculus and Ramanujan’s work, embedded and power electronics, communication systems and industrial automation.</p></div>
+    <div><h4>Languages</h4><p>Bengali, English, Hindi and Santali.</p></div>
+  </div>
+</div></section>
+
+<section id="resume"><div class="wrap">
+  <h2>Resume, as a proof</h2>
+  <dl class="proof">
+    <dt>Professional summary</dt>
+    <dd>Electronics and Communication Engineering student with experience in leadership, community engagement, technical projects, and large-scale student coordination. Strengths include communication, teamwork, event management, and problem-solving.</dd>
+    <dt>Education</dt>
+    <dd>B.Tech in Electronics and Communication Engineering, Kalyani Government Engineering College, Jul 2022-Jul 2026, CGPA 6.8. Higher Secondary at Dhaniakhali Mahamaya Vidyamandir, Mar 2020-Jun 2022, 87.4%.</dd>
+    <dt>Training</dt>
+    <dd>Airports Authority of India, CNS Department, Kolkata (Jul 2025, certificate); Damodar Valley Corporation, Power Systems, Howrah (Jul-Aug 2025, certificate).</dd>
+    <dt>Leadership</dt>
+    <dd>NSS volunteer at KGEC (2024); General Secretary and Organizing Lead of SESWA (Nov 2024-present); Convener of Chitrank, KGEC Art Club (2025-present).</dd>
+  </dl>
+  <ol class="nl" aria-label="Timeline on a number line">
+    <li data-n="0">Jul 2022: B.Tech begins at KGEC</li><li data-n="1">2024: NSS volunteer</li><li data-n="2">Nov 2024: SESWA General Secretary</li><li data-n="3">2025: AAI and DVC training; Chitrank Convener</li><li data-n="4">2025-2026: Solar detector, Gulu AI, SESWA platform</li><li data-n="5">Jul 2026: B.Tech program end date</li></ol>
+<div class="qed">Q.E.D. ∎</div>
+    <!-- Replace assets/resume.pdf to update the downloadable resume; keep the same filename. -->
+    <div class="no-print" style="margin-top:26px"><button class="btn" id="pr">Print live resume</button><a class="btn" href="assets/resume.pdf" download="Indra-Hembram-Resume.pdf">Download resume PDF</a></div>
+  <article class="rv" aria-label="Resume of Indra Hembram">
+    <h3>INDRA HEMBRAM</h3><p class="ct">Kalyani, West Bengal, India | +91-9382091267 | hembramindra1@gmail.com | <a href="https://www.linkedin.com/in/indra-hembram-ece" target="_blank" rel="noopener">LinkedIn</a> | <a href="https://github.com/indra4626" target="_blank" rel="noopener">GitHub</a></p>
+    <h4>Professional Summary</h4><p>Electronics and Communication Engineering student with experience in leadership, community engagement, technical projects, and large-scale student coordination. Skilled in communication, teamwork, event management, and problem-solving through NSS initiatives, organizational responsibilities, and project-based learning. Seeking a government or core engineering role.</p>
+    <h4>Education</h4><p><b>Kalyani Government Engineering College</b>, B.Tech in Electronics and Communication Engineering, Jul 2022-Jul 2026, CGPA 6.8, Kalyani, West Bengal.<br><b>Dhaniakhali Mahamaya Vidyamandir</b>, Higher Secondary Education, Mar 2020-Jun 2022, 87.4%, Hooghly, West Bengal.</p>
+    <h4>Training and Experience</h4><ul>
+      <li><b>Airports Authority of India (AAI)</b>, CNS Department Internship, Kolkata (Jul 2025, Certificate). Learned operational concepts of Communication, Navigation, and Surveillance systems used in aviation; observed aircraft communication workflow, ATC coordination, and airport operational monitoring.</li>
+      <li><b>Damodar Valley Corporation (DVC)</b>, Industrial Training, Howrah (Jul-Aug 2025, Certificate). Learned SCADA concepts, communication flow, and monitoring systems used in power-grid operations; observed coordination and technical supervision in industrial environments.</li>
+    </ul>
+    <h4>Community and Leadership</h4><ul>
+      <li><b>National Service Scheme (NSS), KGEC</b>, Volunteer (2024). Participated in a 7-Day Special Camp focused on community engagement and local development, and in the YUVA SAMVAD: INDIA@2047 youth dialogue initiative.</li>
+      <li><b>Santal Engineering Students’ Welfare Association (SESWA)</b>, General Secretary and Organizing Lead (Nov 2024-present). Coordinated student and alumni engagement supporting the Santal community through career guidance, networking, and welfare activities. Led the SESWA Freshers’ Welcome and Annual Cultural Program 2026, involving 350+ participants and 50+ alumni across West Bengal.</li>
+      <li><b>Chitrank, KGEC Art Club</b>, Convener (2025-present). Led a creative team of 70+ members during the annual ESPECKTRO fest.</li>
+    </ul>
+    <h4>Projects</h4><ul>
+      <li><b>SESWA Registration and Event Management System</b>, Live Project (2026). Built with React.js and Firebase; developed and deployed the event registration platform, used in real operations involving 350+ participants across multiple engineering colleges.</li>
+      <li><b>Solar Powered Air Pollution Detector</b>, GitHub project (2025). Built with Arduino Uno, MQ135 gas sensor, and solar panel; developed a low-cost solar-powered air-quality monitor for sustainable environmental monitoring and public awareness.</li>
+      <li><b>Gulu AI Assistant</b>, Live Project (2025). Browser-based AI assistant interface supporting conversational interaction workflows.</li>
+    </ul>
+    <h4>Skills</h4><p><b>Relevant:</b> Communication, leadership, team coordination, event management, community engagement.<br><b>Technical:</b> Arduino, Python, C, Cisco Packet Tracer, MATLAB, React.js.<br><b>Tools:</b> MS Excel, Word, PowerPoint, Git, GitHub, VS Code.<br><b>Languages:</b> Bengali, English, Hindi, Santali.</p>
+  </article>
+</div></section>
+
+<section id="ach"><div class="wrap">
+  <h2>Achievements</h2>
+  <p class="lead">Numbers from my resume.</p>
+  <div class="ach">
+    <div><b data-n="350" data-s="+">350+</b><span>participants at the SESWA Freshers’ Welcome and Annual Cultural Program 2026, with 50+ alumni</span></div>
+    <div><b data-n="70" data-s="+">70+</b><span>members led as Convener of Chitrank for the ESPECKTRO fest</span></div>
+    <div><b data-n="3" data-s="">3</b><span>industrial trainings: AAI and DVC (certified) and Victoria Industries</span></div>
+    <div><b data-n="87.4" data-s="%">87.4%</b><span>in Higher Secondary Education</span></div>
+  </div>
+</div></section>
+
+<section id="work"><div class="wrap">
+  <h2>Projects</h2>
+  <p class="lead">Projects flow along a sine wave. Select one for the details.</p>
+  <div class="pg" id="pg"></div>
+</div></section>
+
+<section id="lab-s"><div class="wrap">
+  <h2>Math Lab</h2>
+  <p class="lead">Two demos I like: signals and their spectrum, and the angle nature uses to pack seeds.</p>
+  <div class="lab">
+    <div class="tabs"><button aria-pressed="true" data-t="fft">Sine and FFT</button><button aria-pressed="false" data-t="sun">Golden-angle sunflower</button></div>
+    <canvas id="lab" aria-label="Interactive math demo"></canvas>
+    <div class="ctl" id="ctl"></div>
+  </div>
+</div></section>
+
+<section id="contact"><div class="wrap">
+  <h2>Contact, solved step by step</h2>
+  <ol class="steps">
+    <li style="transition-delay:.1s"><span class="m">Given</span><span class="tex" data-tex="\text{You}+\text{Idea}=\,?">You + Idea = ?</span></li>
+    <li style="transition-delay:.5s"><span class="m">Let</span><span class="tex" data-tex="C=(\text{You}+\text{Idea})\times\text{Indra}">C = (You + Idea) × Indra</span></li>
+    <li style="transition-delay:.9s"><span class="m">Expand</span><span class="tex" data-tex="C=\text{You}\times\text{Indra}+\text{Idea}\times\text{Indra}">C = You × Indra + Idea × Indra</span></li>
+    <li style="transition-delay:1.3s"><span class="m">Solve</span><a class="btn" style="margin:0" href="mailto:hembramindra1@gmail.com">hembramindra1@gmail.com</a></li>
+    <li style="transition-delay:1.7s"><span class="m">Therefore</span><span><a class="btn" style="margin:0 10px 0 0" href="https://github.com/indra4626" target="_blank" rel="noopener">GitHub</a><a class="btn" style="margin:0" href="https://www.linkedin.com/in/indra-hembram-ece" target="_blank" rel="noopener">LinkedIn</a> ∎</span></li>
+  </ol>
+</div></section>
+
+<footer><div class="wrap">
+  <button class="euler" id="euler" aria-label="Euler’s identity. Press to toggle Math Mode"><span class="tex" data-tex="e^{i\pi}+1=0">e^(iπ) + 1 = 0</span></button>
+  <div class="m" style="font-size:12px" id="hint">Press the equation.</div>
+  <button class="site-share" id="share-site" type="button" hidden>Copy website link</button>
+</div></footer>
+
+<a class="pin" href="#resume" id="dl">View resume</a>
+
+<dialog id="dlg"><div id="dbody"></div><button class="btn" id="dx">Close</button></dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script>
+const $=s=>document.querySelector(s),PHI=(1+Math.sqrt(5))/2,RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const shareSite=$("#share-site");
+if(location.protocol==="http:"||location.protocol==="https:"){
+ shareSite.hidden=false;
+ shareSite.onclick=async()=>{const url=new URL(".",location.href).href;try{await navigator.clipboard.writeText(url);shareSite.textContent="Website link copied"}catch(_){window.prompt("Copy website link",url)}};
+}
+document.querySelectorAll(".tex").forEach(e=>{try{if(window.katex)e.innerHTML=katex.renderToString(e.dataset.tex,{output:"mathml",throwOnError:false})}catch(_){}});
+function fit(c){const d=Math.min(devicePixelRatio||1,2),r=c.getBoundingClientRect(),g=c.getContext("2d");c.width=r.width*d;c.height=r.height*d;g.setTransform(d,0,0,d,0,0);return[g,r.width,r.height]}
+
+/* Spiral */
+const sp=$("#sp");let[sg,sw,sh]=fit(sp),sp_p=0;
+function spiral(p){sg.clearRect(0,0,sw,sh);const U=Math.min(sw/PHI,sh)*.96,ox=(sw-U*PHI)/2,oy=(sh-U)/2;let x=0,y=0,w=PHI,h=1,P=Math.PI;
+ for(let i=0;i<12;i++){const d=i%4;let s,sx,sy,cx,cy,a0,a1;
+  if(d==0){s=h;sx=x;sy=y;cx=sx+s;cy=sy+s;a0=P;a1=1.5*P;x+=s;w-=s}
+  else if(d==1){s=w;sx=x;sy=y;cx=sx;cy=sy+s;a0=1.5*P;a1=2*P;y+=s;h-=s}
+  else if(d==2){s=h;sx=x+w-s;sy=y;cx=sx;cy=sy;a0=0;a1=.5*P;w-=s}
+  else{s=w;sx=x;sy=y+h-s;cx=sx+s;cy=sy;a0=.5*P;a1=P;h-=s}
+  const f=Math.max(0,Math.min(1,p-i));if(!f)break;
+  sg.strokeStyle="rgba(200,162,74,.35)";sg.lineWidth=1;sg.strokeRect(ox+sx*U,oy+sy*U,s*U,s*U);
+  sg.strokeStyle="#C8A24A";sg.lineWidth=1.6;sg.beginPath();sg.arc(ox+cx*U,oy+cy*U,s*U,a0,a0+(a1-a0)*f);sg.stroke();}}
+const t0=performance.now();
+
+/* Age counter (set your real date of birth below) */
+const BORN=new Date("2004-11-11T00:20:18+05:30");let base=10,lastSec=-1;
+const isP=n=>{if(n<2)return false;if(n%2==0)return n==2;if(n%3==0)return n==3;for(let i=5;i*i<=n;i+=6)if(n%i==0||n%(i+2)==0)return false;return true};
+const isPal=n=>{const s=String(n);return s===[...s].reverse().join("")};
+document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{base=+b.dataset.b;document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed",x===b));lastSec=-1});
+function age(){const ms=Date.now()-BORN,sec=Math.floor(ms/1000);
+ $("#yrs").textContent=(ms/31556952000).toFixed(9)+" years";
+ if(sec===lastSec)return;lastSec=sec;
+ $("#sec").textContent=base==10?sec.toLocaleString("en-US"):(base==2?"0b":"0x")+sec.toString(base).toUpperCase();
+ const m=[];if(isP(sec))m.push("prime second");if(isPal(sec))m.push("palindrome second");
+ const b=$("#badge");b.textContent=m.join(" and ");b.classList.toggle("on",m.length>0)}
+
+/* Projects + modal */
+const PR=[
+ {t:"TRIAC fan speed controller",mb:"Power delivered follows the sine-wave area after firing angle α.",d:"A TRIAC-based AC fan speed controller using phase-angle control.",p:"Vary AC fan power by controlling the TRIAC firing angle.",s:["TRIAC","Power electronics","AC fan control"],availability:"Project URL not provided."},
+ {t:"SESWA Registration and Event Management System",mb:"Registration and attendance sets reveal who signed up, attended, and overlaps.",d:"React.js and Firebase event platform developed for the SESWA Freshers’ Welcome and Cultural Program; used in live operations with 350+ participants from multiple engineering colleges.",p:"Manage event registrations and operations for a large, multi-college audience.",s:["React.js","Firebase"],year:"2026",availability:"Live project; direct URL is not listed in the resume."},
+ {t:"Solar Powered Air Pollution Detector",mb:"Solar power supports continuous MQ135 air-quality sensing.",d:"Low-cost solar-powered air-quality monitoring system built with Arduino Uno and an MQ135 gas sensor, designed for environmental monitoring and public awareness.",p:"Provide affordable air-quality monitoring without relying on mains power.",s:["Arduino Uno","MQ135 sensor","Solar panel"],year:"2025",availability:"GitHub project; direct repository URL is not listed in the resume."},
+ {t:"Gulu AI Assistant",mb:"A prompt-response interface turns conversation into an interaction workflow.",d:"Browser-based AI assistant interface supporting conversational interaction workflows.",p:"Provide a browser interface for conversational AI interactions.",s:["AI assistant interface","Browser-based UI"],year:"2025",availability:"Live project; direct URL is not listed in the resume."}];
+const pv=i=>{let b="",d="";
+ if(i==0){for(let x=0;x<=400;x++){const ph=x/100*Math.PI,w=ph%Math.PI;d+=(x?"L":"M")+x+" "+(60-(w<Math.PI/3?0:Math.sin(ph))*45).toFixed(1)}b=`<path d="${d}" fill="none" stroke="#C8A24A" stroke-width="2"/>`}
+ else if(i==1)b=`<g fill="none" stroke="#C8A24A" stroke-width="2"><circle cx="160" cy="60" r="44"/><circle cx="240" cy="60" r="44"/></g><g fill="#E8E4D8" font-size="14" font-family="monospace" text-anchor="middle"><text x="128" y="65">A</text><text x="272" y="65">B</text><text x="200" y="65">A∩B</text></g>`;
+ else if(i==2){for(let x=0;x<=400;x++)d+=(x?"L":"M")+x+" "+(112-100*Math.exp(-x/110)).toFixed(1);b=`<path d="${d}" fill="none" stroke="#C8A24A" stroke-width="2"/>`}
+ else b=`<g fill="none" stroke="#C8A24A" stroke-width="2"><rect x="20" y="28" width="130" height="64" rx="8"/><rect x="250" y="28" width="130" height="64" rx="8"/><path d="M155 60h85"/><path d="m230 52 10 8-10 8"/></g><g fill="#E8E4D8" font-size="13" font-family="monospace" text-anchor="middle"><text x="85" y="64">PROMPT</text><text x="315" y="64">RESPONSE</text></g>`
+ return `<svg viewBox="0 0 400 120" width="100%" style="background:#131417;border:1px solid rgba(200,162,74,.35)" role="img" aria-label="Math preview">${b}</svg>`};
+$("#pg").innerHTML='<svg class="sw" viewBox="0 0 1000 200" preserveAspectRatio="none" aria-hidden="true"><path id="swp" pathLength="1"/></svg>'+PR.map((p,i)=>`<button class="card" data-i="${i}" style="--y:${Math.round(40*Math.sin(2*Math.PI*(i+.5)/3))}px;--x:${Math.round(28+28*Math.sin(i*2.6))}px"><h3>${p.t}</h3><div class="mb">${p.mb}</div></button>`).join("");
+{let d="";for(let x=0;x<=1000;x+=10)d+=(x?"L":"M")+x+" "+(100+36*Math.sin(2*Math.PI*x/1000)).toFixed(1);$("#swp").setAttribute("d",d)}
+$("#pg").onclick=e=>{const c=e.target.closest(".card");if(!c)return;const p=PR[c.dataset.i];
+ $("#dbody").innerHTML=`<h3>${p.t}</h3><div class="k">What it is</div><div>${p.d}</div><div class="k">Problem solved</div><div>${p.p}</div><div class="k">Tech stack</div><div class="chips">${p.s.map(x=>`<span>${x}</span>`).join("")}</div><div class="k">Project link</div><div>${p.availability}</div><div class="k">Math preview</div>${pv(+c.dataset.i)}<a class="btn" href="https://github.com/indra4626" target="_blank" rel="noopener">GitHub profile</a><a class="btn" href="https://www.linkedin.com/in/indra-hembram-ece" target="_blank" rel="noopener">LinkedIn profile</a>`;$("#dlg").showModal()};
+$("#dx").onclick=()=>$("#dlg").close();$("#dlg").onclick=e=>{if(e.target.id==="dlg")e.target.close()};
+
+/* Math Lab */
+const lc=$("#lab");let[lg,lw,lh]=fit(lc),mode="fft",F=[3,7,12],spec=[];
+function dft(){const N=256;spec=[];for(let k=0;k<=24;k++){let re=0,im=0;for(let n=0;n<N;n++){let v=0;F.forEach((f,j)=>v+=[1,.6,.35][j]*Math.sin(2*Math.PI*f*n/N));re+=v*Math.cos(2*Math.PI*k*n/N);im-=v*Math.sin(2*Math.PI*k*n/N)}spec.push(Math.hypot(re,im)/N*2)}}
+function ctl(){const c=$("#ctl");
+ if(mode=="fft"){c.innerHTML=F.map((f,i)=>`<label>Frequency ${i+1}: <span id="fv${i}">${f}</span><input type="range" min="1" max="24" value="${f}" data-i="${i}"></label>`).join("");c.oninput=e=>{F[e.target.dataset.i]=+e.target.value;$("#fv"+e.target.dataset.i).textContent=e.target.value;dft()}}
+ else{c.innerHTML=`<label>Angle: <span id="av">137.508</span>°<input type="range" min="130" max="145" step="0.001" value="137.508" id="ang"></label>`;c.oninput=()=>$("#av").textContent=(+$("#ang").value).toFixed(3)}}
+function drawLab(t){lg.clearRect(0,0,lw,lh);
+ if(mode=="fft"){const mid=lh*.27,A=lh*.2;lg.strokeStyle="rgba(200,162,74,.3)";lg.lineWidth=1;lg.beginPath();lg.moveTo(0,mid);lg.lineTo(lw,mid);lg.stroke();
+  lg.strokeStyle="#E8E4D8";lg.lineWidth=1.6;lg.beginPath();
+  for(let i=0;i<=256;i++){let v=0;F.forEach((f,j)=>v+=[1,.6,.35][j]*Math.sin(2*Math.PI*f*(i/256+t*.00006*(j+1))));const x=i/256*lw,y=mid-v/1.95*A*1.9;i?lg.lineTo(x,y):lg.moveTo(x,y)}lg.stroke();
+  const bw=lw/25,base=lh*.95,mx=Math.max(...spec,1);lg.fillStyle="#C8A24A";spec.forEach((m,k)=>{const hh=m/mx*lh*.36;lg.fillRect(k*bw+bw*.2,base-hh,bw*.6,hh)});
+  lg.fillStyle="#8F8C80";lg.font="11px JetBrains Mono,monospace";lg.fillText("time domain",6,14);lg.fillText("spectrum (FFT bins)",6,lh*.58)}
+ else{const a=(+$("#ang").value)*Math.PI/180,n=RM?700:Math.min(700,Math.floor(t/12)),R=Math.min(lw,lh)*.47,c=R/Math.sqrt(700);
+  for(let i=1;i<=n;i++){const r=c*Math.sqrt(i),th=i*a;lg.fillStyle=`rgba(200,162,74,${.35+.65*i/700})`;lg.beginPath();lg.arc(lw/2+r*Math.cos(th),lh/2+r*Math.sin(th),2.2,0,6.283);lg.fill()}}}
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{mode=b.dataset.t;document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x===b));ctl();lt0=performance.now()});
+let lt0=performance.now();ctl();dft();
+
+/* Cursor trail */
+const tc=$("#tr"),tg=tc.getContext("2d"),pts=[];let tw,th2;
+function trSize(){tw=tc.width=innerWidth;th2=tc.height=innerHeight}trSize();
+const trail=!RM&&matchMedia("(pointer:fine)").matches;
+if(trail)addEventListener("pointermove",e=>pts.push([e.clientX,e.clientY,performance.now()]));
+function drawTrail(now){tg.clearRect(0,0,tw,th2);while(pts.length&&now-pts[0][2]>700)pts.shift();
+ for(let i=1;i<pts.length;i++){tg.strokeStyle=`rgba(200,162,74,${Math.max(0,1-(now-pts[i][2])/700)})`;tg.lineWidth=1.5;tg.beginPath();tg.moveTo(pts[i-1][0],pts[i-1][1]);tg.lineTo(pts[i][0],pts[i][1]);tg.stroke()}}
+
+/* Euler Easter egg and resume */
+$("#euler").onclick=()=>{const on=document.body.classList.toggle("math");$("#hint").textContent=on?"Math Mode: the gold lines are the golden-ratio grid this page sits on. Press again to hide.":"Press the equation."};
+$("#pr").onclick=()=>window.print();
+
+{let d="";for(let i=0;i<=360;i++){const a=i*Math.PI/180,r=112+6*Math.sin(12*a);d+=(i?"L":"M")+(120+r*Math.cos(a)).toFixed(1)+" "+(120+r*Math.sin(a)).toFixed(1)}$("#wr").setAttribute("d",d)}
+const count=el=>el.querySelectorAll("b").forEach(b=>{const n=+b.dataset.n,sf=b.dataset.s||"",st=performance.now();(function f(now){const p=Math.min(1,(now-st)/1400);b.textContent=(n*(1-Math.pow(1-p,3))).toFixed(n%1?1:0)+sf;if(p<1)requestAnimationFrame(f)})(st)});
+const els=document.querySelectorAll(".card,.sw,.steps,.ach");
+if(RM||!window.IntersectionObserver)els.forEach(e=>e.classList.add("in"));
+else{const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add("in");io.unobserve(e.target);if(e.target.matches(".ach"))count(e.target)}),{threshold:.25});els.forEach(e=>io.observe(e))}
+addEventListener("resize",()=>{[sg,sw,sh]=fit(sp);[lg,lw,lh]=fit(lc);trSize()});
+function loop(now){const p=RM?11:Math.min(11,(now-t0)/9000*11);spiral(p);age();drawLab(now-lt0);if(trail)drawTrail(now);requestAnimationFrame(loop)}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
